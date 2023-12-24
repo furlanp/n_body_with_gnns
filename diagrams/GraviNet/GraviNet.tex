@@ -1,0 +1,47 @@
+\documentclass[tikz, border=10pt]{standalone}
+\usetikzlibrary{external}
+\tikzexternalize
+
+
+\begin{document}
+\begin{tikzpicture}
+\tikzstyle{MLP} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm,text centered, draw=black, fill=red!30]
+\tikzstyle{GNN} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm,text centered, draw=black, fill=green!30]
+\tikzstyle{IGN} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm,text centered, draw=black, fill=blue!30]
+\tikzstyle{GRAVINET} = [rectangle, rounded corners, minimum width=12cm, minimum height=4.4cm,text centered, draw=black, fill=gray!30]
+
+\tikzstyle{AGG} = [circle, minimum width=1cm, minimum height=1cm,text centered, draw=black, fill=white!30]
+
+\tikzstyle{arrow} = [thick, rounded corners=10pt,->,>=stealth]
+\tikzstyle{line} = [thick,-,>=stealth]
+
+    % Your TikZ code here
+    
+    \node (GRAVINET) at (0, -3) [GRAVINET] {};
+    
+    \node (IGN) at (-4, -2.5) [IGN] {IGN};
+    \node (GNN) at (0, -2.5) [GNN] {GNN};  
+    \node (MLP) at (4, -2.5) [MLP] {MLP};   
+    
+    \node (AGG) at (0, -4.5) [AGG] {+}; 
+    
+    \node (input) at (0, 0) {inputs};
+    \node (output) at (0, -6.3) {outputs};
+    \draw [line] (input) -- (0, -1.2)
+    
+     \draw [arrow] (0, -1.2) -- (GNN);
+     \draw [arrow] (0, -1.2) -| (IGN);
+     \draw [arrow] (0, -1.2) -| (MLP);
+    
+    \node (dots) at (-2, -2.5) {...};
+    \node (dots) at (2, -2.5) {...};
+
+	\draw [arrow] (GNN) -- (AGG)
+	\draw [arrow] (IGN) |- (AGG);
+    \draw [arrow] (MLP) |- (AGG);
+	
+	
+	\draw [arrow] (AGG) -- (output)
+
+\end{tikzpicture}
+\end{document}

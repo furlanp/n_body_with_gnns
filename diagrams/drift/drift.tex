@@ -1,0 +1,39 @@
+\documentclass[tikz, border=10pt]{standalone}
+\usetikzlibrary{external}
+\tikzexternalize
+
+
+\begin{document}
+\begin{tikzpicture}
+\tikzstyle{MLP} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm,text centered, draw=black, fill=red!30]
+\tikzstyle{GNN} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm,text centered, draw=black, fill=green!30]
+\tikzstyle{IN} = [rectangle, rounded corners, minimum width=6cm, minimum height=6cm,text centered, draw=black, fill=gray!30]
+
+\tikzstyle{arrow} = [thick, rounded corners=10pt, ->,>=stealth]
+\tikzstyle{line} = [thick,-,>=stealth]
+
+    % Your TikZ code here
+
+	% Draw a dot in the middle
+  \fill (0,0) circle (2pt);
+
+  % Draw a circle around the dot
+  \draw (0,0) circle (5cm);
+  
+  % Draw a curved line representing the falling orbit
+  \draw[->, blue, line width=2pt] (5, 0) to[out=-91, in=60] (4,-4);
+  
+% Draw a curved line representing the falling orbit
+  \draw[->, blue, line width=2pt] (-3.5355, 3.5355) to[out=50, in=190] (0,5.6);
+  
+% Draw a curved line representing the falling orbit
+  \draw[->, blue, line width=2pt] (-1.913, -4.619) to[out=-200, in=-65] (-5.319,-1.813);
+  
+  \draw[red,<->,thick] (0,5) -- (0,5.6);
+  
+  \draw[red,<->,thick] (-4.71,-1.6) -- (-5.319,-1.813);
+  
+  \draw[red,<->,thick] (4,-4) -- (3.5,-3.5);
+  
+\end{tikzpicture}
+\end{document}

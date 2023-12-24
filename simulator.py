@@ -43,6 +43,70 @@ class System:
             body_vel = np.array(body_data['vel'], dtype=float)
             self.bodies.append(Body(body_pos, body_vel, body_data['mass']))
 
+class RotateLeft(System):
+    def __init__(self):
+        earth_data = {
+            'pos': [-1, 0],
+            'vel': [0, 0.1],
+            'mass': 1.0
+        }
+
+        sun_data = {
+            'pos': [0, 0],
+            'vel': [0, 0],
+            'mass': 100000.0       
+        }
+
+        super().__init__([earth_data, sun_data], 2)
+
+class RotateRight(System):
+    def __init__(self):
+        earth_data = {
+            'pos': [-1, 0],
+            'vel': [0, -0.1],
+            'mass': 1.0
+        }
+
+        sun_data = {
+            'pos': [0, 0],
+            'vel': [0, 0],
+            'mass': 100000.0       
+        }
+
+        super().__init__([earth_data, sun_data], 2)
+
+class Falling1(System):
+    def __init__(self):
+        earth_data = {
+            'pos': [-1, 0],
+            'vel': [0, 0.0],
+            'mass': 1.0
+        }
+
+        sun_data = {
+            'pos': [0, 0],
+            'vel': [0, 0],
+            'mass': 100000.0       
+        }
+
+        super().__init__([earth_data, sun_data], 2)
+
+class Falling2(System):
+    def __init__(self):
+        earth_data = {
+            'pos': [0, 1],
+            'vel': [0, 0.0],
+            'mass': 1.0
+        }
+
+        sun_data = {
+            'pos': [0, 0],
+            'vel': [0, 0],
+            'mass': 100000.0       
+        }
+
+        super().__init__([earth_data, sun_data], 2)
+
 class SunEarthSystem(System):
     def __init__(self):
         earth_data = {
@@ -58,6 +122,132 @@ class SunEarthSystem(System):
         }
 
         super().__init__([earth_data, sun_data], 2)
+
+class SunEarthSystem1(System):
+    def __init__(self):
+        earth_data = {
+            'pos': [-1, 0],
+            'vel': [0, -0.01],
+            'mass': 100000.0
+        }
+
+        sun_data = {
+            'pos': [0, 0],
+            'vel': [-0.01, 0],
+            'mass': 100000.0       
+        }
+
+        super().__init__([earth_data, sun_data], 2)
+
+class SunEarthSystem2(System):
+    def __init__(self):
+        earth_data = {
+            'pos': [-1, 0],
+            'vel': [-0.1, -0.1],
+            'mass': 1.0
+        }
+
+        sun_data = {
+            'pos': [0, 0],
+            'vel': [0, 0],
+            'mass': 100000.0       
+        }
+
+        super().__init__([earth_data, sun_data], 2)
+
+class SunEarthSystem3(System):
+    def __init__(self):
+        earth_data = {
+            'pos': [-1, 0],
+            'vel': [0, -0.4],
+            'mass': 1.0
+        }
+
+        sun_data = {
+            'pos': [0, 0],
+            'vel': [0, 0],
+            'mass': 100000.0       
+        }
+
+        super().__init__([earth_data, sun_data], 2)
+
+class SunEarthSystem4(System):
+    def __init__(self):
+        earth_data = {
+            'pos': [-1, 0],
+            'vel': [0.1, 0.4],
+            'mass': 1.0
+        }
+
+        sun_data = {
+            'pos': [0, 0],
+            'vel': [0, 0],
+            'mass': 100000.0       
+        }
+
+        super().__init__([earth_data, sun_data], 2)
+
+class MultiBodySystem(System):
+    def __init__(self):
+        earth1_data = {
+            'pos': [-1, 0],
+            'vel': [0.0, -0.1],
+            'mass': 1.0
+        }
+
+        earth2_data = {
+            'pos': [0, -1.1],
+            'vel': [-0.1, 0.0],
+            'mass': 1.0
+        }
+
+        sun_data = {
+            'pos': [0, 0],
+            'vel': [0, 0],
+            'mass': 100000.0       
+        }
+
+        super().__init__([earth1_data, earth2_data, sun_data], 2)
+
+class FiveStars(System):
+    def __init__(self):
+        earth1_data = {
+            'pos': [-1, 0],
+            'vel': [0.0, -0.09],
+            'mass': 1.0
+        }
+
+        earth2_data = {
+            'pos': [0, -1],
+            'vel': [-0.11, 0.0],
+            'mass': 1.0
+        }
+
+        earth3_data = {
+            'pos': [-0.5, 0],
+            'vel': [0.0, -0.11],
+            'mass': 1.0
+        }
+
+        earth4_data = {
+            'pos': [0, -0.5],
+            'vel': [-0.09, 0.0],
+            'mass': 1.0
+        }
+
+        earth5_data = {
+            'pos': [0, -0.3],
+            'vel': [-0.06, 0.0],
+            'mass': 1.0
+        }
+
+        sun_data = {
+            'pos': [0, 0],
+            'vel': [0, 0],
+            'mass': 100000.0       
+        }
+
+        super().__init__([earth1_data, earth2_data, sun_data, earth3_data, earth4_data, earth5_data], 2)
 
 class RK4:    
     def __init__(self, bodies, dt, dim):
@@ -129,6 +319,7 @@ def make_dataset(system, include_mass=True, relative=True, no_vel=5, dt=0.1, no_
     
     # we need those for calculating differences
     last_pos = [np.zeros(system.dim) for i in range(len(bodies))]
+    last_acc = [np.zeros(system.dim) for i in range(len(bodies))]
 
     for i in range(no_steps):
         body_data = []
@@ -160,10 +351,14 @@ def make_dataset(system, include_mass=True, relative=True, no_vel=5, dt=0.1, no_
                 curr_body_data.extend(list(new_vel))
 
             # acceleration...
-            curr_body_data.extend(list(target.acceleration))
+            new_acc = np.copy(target.acceleration)
+            if relative:
+                new_acc -= last_acc[body_idx]
+            curr_body_data.extend(list(new_acc))
             
             # prepare for next step
             last_pos[body_idx] = np.copy(target.position)
+            last_acc[body_idx] = np.copy(target.acceleration)
             velocities[body_idx].popleft()
 
             body_data.append(curr_body_data)
@@ -177,9 +372,11 @@ def make_dataset(system, include_mass=True, relative=True, no_vel=5, dt=0.1, no_
 
 if __name__ == '__main__':
     # toy example
-    system = SunEarthSystem()
+    system = FiveStars()
+    # system = SunEarthSystem1()
+    # system = MultiBodySystem()
 
-    dataset = make_dataset(system, include_mass=False, relative=False)
+    dataset = make_dataset(system, include_mass=False, relative=False, no_steps=10000)
     print(dataset.shape)
 
     N = dataset.shape[0]
@@ -188,7 +385,13 @@ if __name__ == '__main__':
     # visualization
     def update_func():
         global t
-        points = [list(dataset[t, 0, :2]) + [0], list(dataset[t, 1, :2]) + [0]] 
+        draw = []
+        for i in range(dataset.shape[1]):
+            curr = list(dataset[t, i, 0:2]) + [0]
+            draw.append(curr)
+        t = (t + 1) % N
+        return draw
+        points = [list(dataset[t, 0, :2]) + [0], list(dataset[t, 1, :2]) + [0], list(dataset[t, 2, :2]) + [0]] 
         t = (t + 1) % N
         return points 
     

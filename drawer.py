@@ -3,6 +3,13 @@ import numpy as np
 import numpy.linalg as la
 from OpenGL.GL import *
 from OpenGL.GLU import *
+import imageio.v3 as iio
+import imageio
+from PIL import Image
+
+from matplotlib import pyplot as plt
+
+frames = []
 
 class PygApp:
     def __init__(self, update_func): 
@@ -16,7 +23,7 @@ class PygApp:
 
         # pygame init 
         pg.init()
-        pg.display.set_mode(self.display, pg.OPENGL|pg.DOUBLEBUF)
+        self.frame = pg.display.set_mode(self.display, pg.OPENGL|pg.DOUBLEBUF)
         pg.mouse.set_visible(False)
         self.clock = pg.time.Clock()
 
@@ -40,6 +47,7 @@ class PygApp:
         self.run()
 
     def run(self):
+        global frames
         while self.running:
             # mouse and keyboard interaction
             self.process_input()
@@ -65,6 +73,24 @@ class PygApp:
             self.draw_points()
 
             pg.display.flip()
+
+
+            data = glReadPixels(0, 0, self.display[0], self.display[1], GL_RGB, GL_UNSIGNED_BYTE)
+            image = np.frombuffer(data, dtype=np.uint8).reshape(self.display[1], self.display[0], 3)
+            # Flip the image vertically to match Pygame's coordinate system
+            image = np.flipud(image)
+
+            # Append the frame to the frames list
+            frames.append(image)
+
+            # TODO uncomment to record video 
+
+            if len(frames) >= 60*15:
+                frames = [Image.fromarray(frame) for frame in frames]
+                frames[0].save('output.gif', save_all=True, append_images=frames[1:], loop=0)
+                # imageio.mimsave('output.avi', frames, fps=60)
+                # iio.imwrite('output.gif', frames, duration = 2, loop = 0)
+                exit()
         
             # timing
             self.clock.tick(self.ticks)
